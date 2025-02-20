@@ -16,6 +16,9 @@ import { Router, RouterOutlet } from '@angular/router';
     styleUrl: './post.component.css'
 })
 export class PostComponent implements OnInit {
+isImage(arg0: any): any {
+throw new Error('Method not implemented.');
+}
     postList: any[] = [];
     displayedPostList: any[] = [];
     showUpdateForm: boolean = false;

@@ -5,6 +5,16 @@
       <div class="post-header">
         <div class="post-title">{{post.title}}</div>
       </div>
+      <!-- Display Attachments -->
+    <div *ngIf="post.attachment">
+      <p><strong>Attachment:</strong></p>
+      <div *ngIf="isImage(post.attachment)">
+        <img [src]="post.attachment" alt="Attachment" width="200" />
+      </div>
+      <div *ngIf="!isImage(post.attachment)">
+        <a [href]="post.attachment" target="_blank">View Attachment</a>
+      </div>
+    </div>
       <div class="post-content">{{post.content}}</div>
       <div class="post-actions">
         <button class="action-button" (click)="toggleLike(post._id)">
