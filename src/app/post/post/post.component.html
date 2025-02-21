@@ -12,11 +12,12 @@
       <!-- If it's an image, display it -->
       <div *ngIf="isImage(post.attachmentUrl); else fileLink">
         <img [src]="post.attachmentUrl" alt="Attachment" width="200" />
-      </div>
+       
       <!-- Attempt to render all attachments as images--> 
   <ng-template #fileLink>
     <img [src]="getFullAttachmentUrl(post.attachment)" alt="Attachment" width="500" onerror="this.onerror=null; this.src='assets/file-icon.png';" />
   </ng-template>
+</div>
     
       <!-- If it's not an image, display it as a link  
       <ng-template #fileLink>

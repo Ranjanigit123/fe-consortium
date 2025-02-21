@@ -35,6 +35,7 @@ export class PostComponent implements OnInit {
 //isImage: any;
 //getFullAttachmentUrl: any;
     noPosts!: TemplateRef<NgIfContext<boolean>> | null;
+    fileLink!: TemplateRef<NgIfContext<boolean>> | null;
     constructor(private postService: PostService,
         private dataService: DataService,
         private likeService: LikeService, private router: Router) { }
