@@ -1,7 +1,7 @@
 // post.component.ts
 
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonModule, NgIfContext } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PostService } from '../post.service';
 import { DataService } from '../../data.service';
@@ -16,9 +16,6 @@ import { Router, RouterOutlet } from '@angular/router';
     styleUrl: './post.component.css'
 })
 export class PostComponent implements OnInit {
-isImage(arg0: any): any {
-throw new Error('Method not implemented.');
-}
     postList: any[] = [];
     displayedPostList: any[] = [];
     showUpdateForm: boolean = false;
@@ -35,13 +32,27 @@ throw new Error('Method not implemented.');
     @Output() buttonClicked: EventEmitter<void> =
         new EventEmitter < void> ();
     likes: number = 0;
+//isImage: any;
+//getFullAttachmentUrl: any;
+    noPosts!: TemplateRef<NgIfContext<boolean>> | null;
     constructor(private postService: PostService,
-        private dataService: DataService, 
-        private likeService: LikeService, 
-        private router: Router) { }
+        private dataService: DataService,
+        private likeService: LikeService, private router: Router) { }
     ngOnInit(): void {
         this.getAllPosts();
     }
+   // Check if the attachment is an image based on its extension
+isImage(url: string | null): boolean {
+    if (!url) return false;
+    return /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
+}
+
+// Ensure the attachment URL is correctly formed
+getFullAttachmentUrl(url: string | null): string {
+    if (!url) return '';
+    return url.startsWith('http') ? url : `https://community-forum-bzzb.onrender.com/uploads/${url}`;
+}
+
 
     getUserId(): string | null {
         if (typeof localStorage !== 'undefined') {
@@ -60,7 +71,10 @@ throw new Error('Method not implemented.');
             if (token) {
                 this.postService.getAllPosts()
                     .subscribe((postList: any) => {
-                        this.postList = postList;
+                        this.postList = postList.map((post: { attachment: string | null; }) => ({
+                            ...post,
+                            attachmentUrl: post.attachment ? this.getFullAttachmentUrl(post.attachment) : null
+                        }));
                         this.displayedPostList = [...this.postList];
                     });
             }
